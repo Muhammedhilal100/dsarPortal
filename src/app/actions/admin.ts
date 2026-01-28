@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { revalidatePath } from "next/cache"
 
-export async function updateCompanyStatus(companyId: string, status: "APPROVED" | "REJECTED") {
+export async function updateCompanyStatus(companyId: string, status: string) {
   const session = await auth()
   if (!session || (session.user as any).role !== "ADMIN") {
     return { error: "Unauthorized" }

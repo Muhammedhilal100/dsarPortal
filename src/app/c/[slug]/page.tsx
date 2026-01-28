@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { submitDsar } from "@/app/actions/dsar"
 import { ShieldCheck, Info, Globe, Send, CheckCircle2, Lock, ArrowRight, Building2, ShieldAlert } from "lucide-react"
 import DynamicFavicon from "@/components/DynamicFavicon"
+import FileUpload from "@/components/FileUpload"
 import { Metadata } from "next"
 
 async function submitDsarAction(formData: FormData) {
@@ -151,16 +152,7 @@ export default async function PublicCompanyPage({
 
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">Identity Verification</label>
-                    <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-6 text-center transition-all hover:border-lime-500 dark:border-zinc-700 dark:bg-zinc-950">
-                      <input name="attachments" type="file" multiple className="hidden" id="file-upload" />
-                      <label htmlFor="file-upload" className="cursor-pointer">
-                        <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
-                          <Info className="h-5 w-5 text-zinc-500" />
-                        </div>
-                        <p className="mt-2 text-sm font-bold text-zinc-600 dark:text-zinc-400">Click to upload documents</p>
-                        <p className="mt-1 text-xs text-zinc-400">ID Card, Passport, or other proof (Max 5MB)</p>
-                      </label>
-                    </div>
+                    <FileUpload />
                   </div>
 
                   <div className="pt-4">
