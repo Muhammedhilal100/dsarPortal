@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String // "ADMIN" | "OWNER"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  company      Company?
+}
+
+model Company {
+  id                   String        @id @default(cuid())
+  ownerId              String        @unique
+  owner                User          @relation(fields: [ownerId], references: [id])
+  name                 String
+  logo                 String?
+  address              String?
+  email                String?
+  phone                String?
+  employeesCount       Int?
+  field                String?
+  representation       String // "EU" | "UK" | "EU_UK"
+  status               String        @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED"
+  slug                 String?       @unique
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  subscriptionStatus   String        @default("inactive") // "inactive" | "trialing" | "active" | "canceled" | "past_due"
+  dsarRequests         DsarRequest[]
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+}
+
+model DsarRequest {
+  id             String   @id @default(cuid())
+  companyId      String
+  company        Company  @relation(fields: [companyId], references: [id])
+  requesterName  String
+  requesterEmail String
+  requesterPhone String?
+  requestText    String
+  status         String   @default("OPEN") // "OPEN" | "IN_PROGRESS" | "IN_REVIEW" | "CLOSED"
+  attachments    String? // JSON or comma-separated list of file paths/URLs
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String // e.g., "COMPANY_APPROVED", "DSAR_STATUS_UPDATED"
+  details   String? // JSON string or description
+  createdAt DateTime @default(now())
+}
